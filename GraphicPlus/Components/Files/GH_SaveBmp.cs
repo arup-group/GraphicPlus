@@ -71,13 +71,14 @@ namespace GraphicPlus.Components.Drawings
             Drawing drawing = new Drawing();
             List<IGH_Goo> goos = new List<IGH_Goo>();
             if (!DA.GetDataList(0, goos)) return;
-
+            Console.WriteLine("DBG:: getting drawings");
             foreach (IGH_Goo goo in goos)
             {
                 goo.TryGetDrawings(ref drawing);
             }
 
             string path = "C:\\Users\\Public\\Documents\\";
+            Console.WriteLine("DBG:: getting file path");
             bool hasPath = DA.GetData(1, ref path);
 
             string name = DateTime.UtcNow.ToString("yyyy-dd-M_HH-mm-ss");
@@ -91,6 +92,7 @@ namespace GraphicPlus.Components.Drawings
             int dpi = 96;
             if (DA.GetData(4, ref dpi)) drawing.Dpi = dpi;
 
+            Console.WriteLine("DBG:: to bitmap");
             Bitmap bitmap = drawing.ToBitmap();
 
             bool save = false;
@@ -133,10 +135,11 @@ namespace GraphicPlus.Components.Drawings
                     break;
             }
 
+            Console.WriteLine($"DBG:: cloning bitmap: {bitmap}");
             Bitmap bmp = (Bitmap)bitmap.Clone(new Rectangle(0, 0, bitmap.Width, bitmap.Height), System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 
             string filepath = path + name + ext;
-
+            Console.WriteLine("DBG:: save bmp");
             if (save)
             {
                 bmp.Save(filepath, encoding);
@@ -145,6 +148,7 @@ namespace GraphicPlus.Components.Drawings
                 DA.SetData(0, filepath);
             }
 
+            Console.WriteLine("DBG:: merge drawings");
             prevDrawing.MergeDrawing(drawing);
         }
 

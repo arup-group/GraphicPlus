@@ -35,7 +35,7 @@ namespace GraphicPlus
         protected string textContent = string.Empty;
         protected Plane textPlane = Plane.Unset;
         protected List<Hatch> hatches = new List<Hatch>();
-        private readonly double mTol = Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance * 100;
+        private double mTol;
 
         #endregion
 
@@ -215,7 +215,8 @@ namespace GraphicPlus
                 this.curveTypes.Add(CurveTypes.Curve);
             }
             this.curves.Add(nurbsCurve);
-                hatches = Hatch.Create(curves, 0, 0, 1, mTol).ToList();
+            mTol = Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance * 100;
+            hatches = Hatch.Create(curves, 0, 0, 1, mTol).ToList();
         }
 
         public BoundingBox GetBoundingBox()
